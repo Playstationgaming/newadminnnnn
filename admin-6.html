@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Cola Sofa Admin</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@1,800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#111;--mute:#707072;--bg:#f5f5f5;--line:#e5e5e5;--red:#e4002b;--h:'Barlow Condensed',Impact,sans-serif}
+*{box-sizing:border-box;margin:0}
+[hidden]{display:none!important}
+body{font:400 15px/1.5 Inter,system-ui,sans-serif;color:var(--ink);background:var(--bg);-webkit-font-smoothing:antialiased}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+.logo{font:italic 800 30px/1 var(--h);text-transform:uppercase}
+.logo span{color:var(--red)}
+.center{min-height:100vh;display:grid;place-items:center;padding:16px}
+.panel{background:#fff;border-radius:8px;padding:24px;margin-bottom:20px}
+.center .panel{width:100%;max-width:400px;margin:0}
+label{display:block;font-weight:500;font-size:13px;margin:14px 0 6px}
+input,select,textarea{width:100%;font:inherit;padding:11px 14px;border:1px solid #ccc;border-radius:8px;background:#fff}
+input:focus,select:focus,textarea:focus{outline:0;border-color:var(--ink)}
+textarea{resize:vertical;min-height:76px}
+.btn{background:var(--ink);color:#fff;padding:12px 24px;border-radius:30px;font-weight:500;margin-top:18px}
+.btn:hover{background:#444}
+.btn:disabled{opacity:.5;cursor:wait}
+.btn.ghost{background:#fff;color:var(--ink);border:1px solid #ccc}
+.btn.ghost:hover{border-color:var(--ink)}
+.sm{padding:8px 14px;margin:0;font-size:13px}
+.danger{color:var(--red)}
+.err{color:var(--red);font-size:13px;margin-top:10px;min-height:20px}
+.top{position:sticky;top:0;z-index:5;display:flex;align-items:center;gap:16px;padding:12px 24px;background:#fff;border-bottom:1px solid var(--line)}
+.top b{font-weight:600}
+.top .sp{flex:1}
+.top a,.top button{font-size:14px;text-decoration:underline}
+.top .who{color:var(--mute);font-size:13px}
+main{max-width:1080px;margin:0 auto;padding:24px 16px 80px}
+.tabs{display:flex;gap:8px;margin-bottom:20px}
+.tabs button{padding:8px 20px;border-radius:30px;border:1px solid #ccc;background:#fff;font-weight:500}
+.tabs .on{background:var(--ink);color:#fff;border-color:var(--ink)}
+h2{font-size:20px;font-weight:600}
+h3{font-size:15px;font-weight:500}
+.hint,.mute{color:var(--mute);font-size:13px}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:0 16px}
+.row{display:grid;grid-template-columns:120px 1fr auto;gap:14px;align-items:center;padding:12px 0;border-top:1px solid var(--line)}
+.row img{width:120px;height:68px;object-fit:cover;border-radius:6px;background:#e8e8e8}
+.row .f{display:grid;gap:8px}
+.ab{display:flex;gap:6px;flex-wrap:wrap}
+.pg{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:16px}
+.pc{background:#fff;border-radius:8px;padding:12px}
+.pi{position:relative;aspect-ratio:1;background:#e8e8e8;border-radius:6px;overflow:hidden;margin-bottom:10px}
+.pi img{width:100%;height:100%;object-fit:cover}
+.pi span{position:absolute;left:8px;bottom:8px;background:#fff;border-radius:12px;padding:2px 10px;font-size:12px;font-weight:500}
+.pc .ab{margin-top:10px}
+.pc s{color:var(--mute)}
+#keep{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+.th{position:relative;width:72px;height:72px}
+.th img{width:100%;height:100%;object-fit:cover;border-radius:6px}
+.th button{position:absolute;top:-6px;right:-6px;width:22px;height:22px;border-radius:50%;background:var(--ink);color:#fff;font-size:11px}
+.empty{padding:28px 0;text-align:center;color:var(--mute)}
+code{background:var(--bg);padding:1px 6px;border-radius:4px;font-size:13px}
+.th img{cursor:pointer}
+.th.cv::after{content:'Cover';position:absolute;left:4px;bottom:4px;background:#fff;border-radius:8px;padding:0 6px;font-size:10px;font-weight:500;pointer-events:none}
+.bdg{display:inline-block;min-width:18px;padding:0 6px;margin-left:6px;border-radius:9px;background:var(--red);color:#fff;font-size:11px;line-height:18px}
+.tabs .on .bdg{background:#fff;color:var(--ink)}
+.oc{padding:18px 20px;margin-bottom:12px}
+.oh{display:flex;flex-wrap:wrap;align-items:center;gap:8px 14px}
+.oid{font:600 16px/1 ui-monospace,Menlo,Consolas,monospace}
+.oh select{width:auto;margin-left:auto;padding:7px 12px;font-size:13px;font-weight:600}
+.oh select[data-s=new]{color:var(--red);border-color:var(--red)}
+.oh select[data-s=verified]{color:#0a6cff}
+.oh select[data-s=shipped]{color:#c26a00}
+.oh select[data-s=delivered]{color:#1a9e4b}
+.oh select[data-s=cancelled]{color:var(--mute)}
+.og{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-top:14px}
+.og h4{font-size:12px;font-weight:600;color:var(--mute);text-transform:uppercase;letter-spacing:.04em;margin-bottom:4px}
+.oi{display:flex;gap:10px;align-items:center;margin-top:8px}
+.oi>div{width:40px;height:40px;border-radius:6px;background:#e8e8e8;flex:none;overflow:hidden}
+.oi img{width:100%;height:100%;object-fit:cover}
+.oi>span:last-child{margin-left:auto;font-weight:500}
+.ohead{display:flex;justify-content:space-between;align-items:baseline;gap:12px}
+#toast{position:fixed;left:50%;bottom:28px;translate:-50% 20px;background:var(--ink);color:#fff;padding:12px 22px;border-radius:30px;opacity:0;transition:.3s;z-index:50;pointer-events:none;max-width:90vw}
+#toast.on{opacity:1;translate:-50% 0}
+@media(max-width:700px){.g2{grid-template-columns:1fr}.row{grid-template-columns:90px 1fr}.row img{width:90px;height:56px}.row .ab{grid-column:1/-1}.top{padding:12px 16px}.top .who{display:none}}
+</style>
+</head>
+<body>
+
+<div class="center" id="setup" hidden>
+  <div class="panel">
+    <div class="logo">Cola<span>Sofa</span></div>
+    <h2 style="margin-top:14px">Connect Firebase first</h2>
+    <p class="hint" style="margin-top:6px">Open this file, find <code>const FIREBASE_CONFIG = null;</code> and paste your Firebase web config there. Use the same config as the storefront.</p>
+  </div>
+</div>
+
+<div class="center" id="login" hidden>
+  <div class="panel">
+    <div class="logo">Cola<span>Sofa</span></div>
+    <h2 style="margin-top:14px">Admin sign in</h2>
+    <p class="hint" style="margin-top:6px">Sign in with the Google account you use as admin.</p>
+    <button class="btn" id="lb" style="width:100%">Sign in with Google</button>
+    <p class="err" id="lerr" role="alert"></p>
+  </div>
+</div>
+
+<div id="app" hidden>
+  <header class="top">
+    <a class="logo" href="#" style="text-decoration:none">Cola<span>Sofa</span></a><b>Admin</b>
+    <span class="sp"></span><span class="who" id="who"></span>
+    <a href="cola-sofa.html" target="_blank" rel="noopener">View store</a>
+    <button id="out">Log out</button>
+  </header>
+  <main>
+    <nav class="tabs"><button class="on" data-t="gallery">Gallery</button><button data-t="products">Products</button><button data-t="orders">Orders<span class="bdg" id="nb" hidden></span></button><button data-t="about">Why Us page</button></nav>
+
+    <section id="t-gallery">
+      <form class="panel" id="gf">
+        <h2>Add a gallery photo</h2>
+        <p class="hint">This is a big banner photo at the top of the store. Add one photo at a time.</p>
+        <label for="gfile">Photo</label><input id="gfile" type="file" accept="image/*">
+        <label for="gurl">Or paste one image URL</label><input id="gurl" type="url" placeholder="https://...">
+        <div class="g2">
+          <div><label for="gt">Headline (optional)</label><input id="gt" placeholder="Wear it loud"></div>
+          <div><label for="gs">Subtitle (optional)</label><input id="gs" placeholder="The Winter Drop Collection"></div>
+        </div>
+        <button class="btn" id="gb">Add to gallery</button>
+      </form>
+      <div class="panel"><h2>Gallery order</h2><p class="hint">Edit text and it saves automatically. Use the arrows to change the order on the store.</p><div id="gl"></div></div>
+    </section>
+
+    <section id="t-products" hidden>
+      <form class="panel" id="pf">
+        <h2 id="ptitle">Add a new product</h2>
+        <div class="g2">
+          <div><label for="pn">Product name</label><input id="pn" required placeholder="Cola Cloud Hoodie"></div>
+          <div><label for="pt">Type</label><input id="pt" required placeholder="Men's Hoodie"></div>
+          <div><label for="pc">Category</label><select id="pc"><option>Men</option><option>Women</option></select></div>
+          <div><label for="ps">Sizes (comma separated, optional)</label><input id="ps" placeholder="S, M, L, XL"></div>
+          <div><label for="pp">Price (₹)</label><input id="pp" type="number" min="0" required></div>
+          <div><label for="pm">Original price (₹, optional, shows as sale)</label><input id="pm" type="number" min="0"></div>
+        </div>
+        <label for="pd">Description</label><textarea id="pd"></textarea>
+        <label for="pfile">Product photos <span class="mute" id="pcnt">(0 of 10)</span></label><input id="pfile" type="file" accept="image/*" multiple>
+        <p class="hint" style="margin-top:6px">Select up to 10 photos at once (compressed automatically). The first photo is the cover. Click a saved photo below to make it the cover.</p>
+        <label for="purl">Or paste image URLs (one per line)</label><textarea id="purl" placeholder="https://..."></textarea>
+        <div id="keep"></div>
+        <button class="btn" id="pb">Add product</button>
+        <button class="btn ghost" type="button" id="pcancel" hidden>Cancel</button>
+      </form>
+      <h2 style="margin-bottom:12px">All products</h2>
+      <div class="pg" id="pl"></div>
+    </section>
+
+    <section id="t-orders" hidden>
+      <div class="panel">
+        <div class="ohead"><h2>Orders</h2><span class="mute" id="ocount"></span></div>
+        <p class="hint">Orders appear here the moment a customer places one on the store. Change the status as you verify payment and ship.</p>
+        <div class="g2">
+          <div><label for="oq">Search</label><input id="oq" placeholder="Order ID, name, phone, email or UTR"></div>
+          <div><label for="of">Status</label><select id="of"><option value="">All orders</option><option value="new">New</option><option value="verified">Payment verified</option><option value="shipped">Shipped</option><option value="delivered">Delivered</option><option value="cancelled">Cancelled</option></select></div>
+        </div>
+      </div>
+      <div id="ol"></div>
+    </section>
+
+    <section id="t-about" hidden>
+      <form class="panel" id="qf">
+        <h2>Quality photos</h2>
+        <p class="hint">Shown on the "Why Us" page of the store: fabric close-ups, stitching, tags, packing. You can select several photos at once.</p>
+        <label for="qfile">Photos</label><input id="qfile" type="file" accept="image/*" multiple>
+        <label for="qc">Caption (optional)</label><input id="qc" maxlength="80" placeholder="e.g. Original fabric, clean stitching">
+        <button class="btn" id="qb">Add quality photos</button>
+      </form>
+      <form class="panel" id="rf">
+        <h2>Customer review</h2>
+        <p class="hint">Add a real customer review. A photo is optional (the customer's photo or a screenshot of their message).</p>
+        <div class="g2">
+          <div><label for="rn">Customer name</label><input id="rn" required maxlength="60"></div>
+          <div><label for="rc">City (optional)</label><input id="rc" maxlength="60"></div>
+        </div>
+        <div class="g2">
+          <div><label for="rs">Rating</label><select id="rs"><option value="5">5 stars</option><option value="4">4 stars</option><option value="3">3 stars</option></select></div>
+          <div><label for="rfile">Photo (optional)</label><input id="rfile" type="file" accept="image/*"></div>
+        </div>
+        <label for="rt">Review</label><textarea id="rt" required maxlength="400"></textarea>
+        <button class="btn" id="rb">Add review</button>
+      </form>
+      <div class="panel"><h2>On the Why Us page</h2><div id="al"></div></div>
+    </section>
+  </main>
+</div>
+<div id="toast" role="status"></div>
+
+<script type="module">
+import{initializeApp}from'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
+import{getAuth,onAuthStateChanged,GoogleAuthProvider,signInWithPopup,signOut}from'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
+import{getFirestore,collection,getDocs,addDoc,updateDoc,deleteDoc,doc,serverTimestamp,onSnapshot}from'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
+
+// Paste the same Firebase web config you use in the storefront.
+const FIREBASE_CONFIG = {
+  apiKey: "AIzaSyAzQP7JonKpDBuh7NmsdKjvI4KQN_7u8VU",
+  authDomain: "beneton-b8ce0.firebaseapp.com",
+  projectId: "beneton-b8ce0",
+  storageBucket: "beneton-b8ce0.firebasestorage.app",
+  messagingSenderId: "1080382705341",
+  appId: "1:1080382705341:web:4014ba7f51b2f4d44371d4"
+};
+
+const $=(s,r=document)=>r.querySelector(s),$$=(s,r=document)=>[...r.querySelectorAll(s)];
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const inr=n=>'₹'+Number(n).toLocaleString('en-IN');
+const lines=t=>t.split('\n').map(s=>s.trim()).filter(s=>/^https?:\/\//.test(s));
+const ADMIN_EMAIL='raj15chat@gmail.com';
+let auth,db,gal=[],prods=[],edit=null,keep=[],orders=[],about=[],unsub=null,first=true;
+
+function toast(m,hold){const t=$('#toast');t.textContent=m;t.classList.add('on');clearTimeout(t._t);if(!hold)t._t=setTimeout(()=>t.classList.remove('on'),2600)}
+async function run(btn,fn,ok){
+ btn.disabled=true;
+ try{await fn();if(ok)toast(ok);else $('#toast').classList.remove('on')}
+ catch(e){console.error(e);toast(/permission|unauthorized/.test(e.code||'')?'Permission denied. Check your Firebase rules.':e.message||'Something went wrong')}
+ btn.disabled=false;
+}
+
+/* ---------- photos: compressed in the browser and saved inside Firestore (no Storage needed) ---------- */
+const LIMIT={gallery:[1600,300000],products:[800,90000],about:[1000,110000]}; // [longest side in px, max characters per photo]
+async function shrink(f,[max,cap]){
+ if(!f.type.startsWith('image/'))throw new Error(f.name+' is not an image');
+ const bmp=await createImageBitmap(f);let d=max,q=.8;
+ for(let n=0;n<14;n++){
+  const s=Math.min(1,d/Math.max(bmp.width,bmp.height)),c=document.createElement('canvas');
+  c.width=Math.round(bmp.width*s);c.height=Math.round(bmp.height*s);
+  const x=c.getContext('2d');x.fillStyle='#fff';x.fillRect(0,0,c.width,c.height);x.drawImage(bmp,0,0,c.width,c.height);
+  const out=c.toDataURL('image/jpeg',q);
+  if(out.length<=cap)return out;
+  if(q>.55)q-=.1;else d*=.85;
+ }
+ throw new Error(f.name+' could not be compressed enough. Try a smaller photo.');
+}
+async function upload(files,kind){
+ const out=[];let i=0;
+ for(const f of files){toast(`Compressing photo ${++i} of ${files.length}...`,true);out.push(await shrink(f,LIMIT[kind]))}
+ return out;
+}
+
+/* ---------- data ---------- */
+async function refresh(){
+ const rd=async n=>(await getDocs(collection(db,n))).docs.map(d=>({id:d.id,...d.data()}));
+ [gal,prods,about]=await Promise.all([rd('gallery'),rd('products'),rd('about').catch(()=>[])]);
+ gal.sort((a,b)=>(a.order||0)-(b.order||0));
+ prods.sort((a,b)=>(b.createdAt?.seconds||0)-(a.createdAt?.seconds||0));
+ drawGal();drawProds();drawOrders();drawAbout();
+}
+function drawGal(){
+ $('#gl').innerHTML=gal.map((g,i)=>`<div class="row" data-id="${esc(g.id)}"><img src="${esc(g.image)}" alt=""><div class="f"><input data-k="title" value="${esc(g.title)}" placeholder="Headline" aria-label="Headline"><input data-k="sub" value="${esc(g.sub)}" placeholder="Subtitle" aria-label="Subtitle"></div><div class="ab"><button class="btn ghost sm" data-a="up" aria-label="Move up"${i?'':' disabled'}>↑</button><button class="btn ghost sm" data-a="dn" aria-label="Move down"${i<gal.length-1?'':' disabled'}>↓</button><button class="btn ghost sm danger" data-a="del">Delete</button></div></div>`).join('')||'<p class="empty">No gallery photos yet. Add some above.</p>';
+}
+function drawProds(){
+ $('#pl').innerHTML=prods.map(p=>`<div class="pc" data-id="${esc(p.id)}"><div class="pi">${p.images?.[0]?`<img src="${esc(p.images[0])}" alt="">`:''}<span>${p.images?.length||0} photos</span></div><h3>${esc(p.name)}</h3><p class="mute">${esc(p.type)} · ${esc(p.category)}</p><p>${inr(p.price)}${p.mrp>p.price?` <s>${inr(p.mrp)}</s>`:''}</p><div class="ab"><button class="btn ghost sm" data-a="edit">Edit / add photos</button><button class="btn ghost sm danger" data-a="del">Delete</button></div></div>`).join('')||'<p class="empty">No products yet. Add your first one above.</p>';
+}
+const MAXP=10,pcount=()=>keep.length+$('#pfile').files.length+lines($('#purl').value).length;
+const cnt=()=>{const n=pcount(),c=$('#pcnt');c.textContent=`(${n} of ${MAXP})`;c.style.color=n>MAXP?'var(--red)':''};
+const drawKeep=()=>{$('#keep').innerHTML=keep.map((u,i)=>`<div class="th${i?'':' cv'}"><img src="${esc(u)}" alt="" data-m="${i}" title="${i?'Make cover photo':'Cover photo'}"><button type="button" data-r="${i}" aria-label="Remove photo">✕</button></div>`).join('');cnt()};
+
+/* ---------- gallery actions ---------- */
+$('#gf').onsubmit=e=>{e.preventDefault();run($('#gb'),async()=>{
+ const f=$('#gfile').files[0],u=lines($('#gurl').value);
+ if(f&&u.length)throw new Error('Choose either a photo or a URL, not both');
+ const urls=f?await upload([f],'gallery'):u;
+ if(!urls.length)throw new Error('Choose a photo or paste an image URL');
+ let o=Math.max(0,...gal.map(g=>g.order||0));
+ for(const image of urls)await addDoc(collection(db,'gallery'),{image,title:$('#gt').value.trim(),sub:$('#gs').value.trim(),order:++o});
+ $('#gf').reset();await refresh();
+},'Added to gallery')};
+$('#gl').onchange=e=>{
+ const k=e.target.dataset.k;if(!k)return;
+ updateDoc(doc(db,'gallery',e.target.closest('.row').dataset.id),{[k]:e.target.value.trim()}).then(()=>toast('Saved')).catch(()=>toast('Could not save. Check your Firebase rules.'));
+};
+$('#gl').onclick=e=>{
+ const b=e.target.closest('[data-a]');if(!b)return;
+ const id=b.closest('.row').dataset.id,i=gal.findIndex(g=>g.id===id);
+ run(b,async()=>{
+  if(b.dataset.a==='del'){if(!confirm('Delete this photo from the gallery?'))return;await deleteDoc(doc(db,'gallery',id))}
+  else{const j=i+(b.dataset.a==='up'?-1:1);[gal[i],gal[j]]=[gal[j],gal[i]];await Promise.all(gal.map((g,k)=>g.order===k+1?0:updateDoc(doc(db,'gallery',g.id),{order:k+1})))}
+  await refresh();
+ });
+};
+
+/* ---------- product actions ---------- */
+function resetForm(){edit=null;keep=[];$('#pf').reset();drawKeep();$('#ptitle').textContent='Add a new product';$('#pb').textContent='Add product';$('#pcancel').hidden=true}
+function startEdit(p){
+ edit=p.id;keep=[...(p.images||[])];
+ $('#pn').value=p.name||'';$('#pt').value=p.type||'';$('#pc').value=p.category||'Men';if(!$('#pc').value)$('#pc').value='Men';$('#pp').value=p.price??'';$('#pm').value=p.mrp||'';
+ $('#ps').value=(p.sizes||[]).join(', ');$('#pd').value=p.desc||'';
+ $('#ptitle').textContent='Edit product';$('#pb').textContent='Save changes';$('#pcancel').hidden=false;
+ drawKeep();$('#pf').scrollIntoView({behavior:'smooth'});
+}
+$('#pcancel').onclick=resetForm;
+$('#keep').onclick=e=>{
+ const b=e.target.closest('[data-r]'),m=e.target.closest('[data-m]');
+ if(b)keep.splice(+b.dataset.r,1);
+ else if(m&&+m.dataset.m)keep.unshift(...keep.splice(+m.dataset.m,1));
+ else return;
+ drawKeep();
+};
+$('#pfile').onchange=cnt;$('#purl').oninput=cnt;
+$('#pf').onsubmit=e=>{e.preventDefault();run($('#pb'),async()=>{
+ const data={name:$('#pn').value.trim(),type:$('#pt').value.trim(),category:$('#pc').value,price:+$('#pp').value,mrp:+$('#pm').value||0,desc:$('#pd').value.trim(),sizes:$('#ps').value.split(',').map(s=>s.trim()).filter(Boolean)};
+ if(pcount()>MAXP)throw new Error(`A product can have up to ${MAXP} photos. You have ${pcount()}, so remove ${pcount()-MAXP}.`);
+ const images=[...keep,...await upload([...$('#pfile').files],'products'),...lines($('#purl').value)];
+ if(!images.length)throw new Error('Add at least one product photo');
+ if(images.join('').length>960000)throw new Error('These photos are too large together. Remove a few or use smaller ones.');
+ if(edit){
+  await updateDoc(doc(db,'products',edit),{...data,images});
+ }else await addDoc(collection(db,'products'),{...data,images,createdAt:serverTimestamp()});
+ resetForm();await refresh();
+},edit?'Product updated':'Product added')};
+$('#pl').onclick=e=>{
+ const b=e.target.closest('[data-a]');if(!b)return;
+ const p=prods.find(x=>x.id===b.closest('.pc').dataset.id);
+ if(b.dataset.a==='edit')return startEdit(p);
+ run(b,async()=>{
+  if(!confirm(`Delete "${p.name}" and its photos?`))return;
+  await deleteDoc(doc(db,'products',p.id));
+  if(edit===p.id)resetForm();await refresh();
+ },'Product deleted');
+};
+
+/* ---------- Why Us page: quality photos + reviews ---------- */
+function drawAbout(){
+ about.sort((a,b)=>(b.createdAt?.seconds||0)-(a.createdAt?.seconds||0));
+ $('#al').innerHTML=about.map(a=>`<div class="row" data-id="${esc(a.id)}">${a.image?`<img src="${esc(a.image)}" alt="">`:'<div></div>'}<div><span class="mute">${a.kind==='review'?'Review':'Quality photo'}</span><br>${a.kind==='review'?`<b>${esc(a.name)}</b>${a.city?', '+esc(a.city):''} · ${'★'.repeat(a.rating||5)}<br>${esc(a.text)}`:esc(a.caption||'No caption')}</div><div class="ab"><button class="btn ghost sm danger" data-a="del">Delete</button></div></div>`).join('')||'<p class="empty">Nothing added yet.</p>';
+}
+$('#qf').onsubmit=e=>{e.preventDefault();run($('#qb'),async()=>{
+ const fs=[...$('#qfile').files];
+ if(!fs.length)throw new Error('Choose at least one photo');
+ if(fs.length>12)throw new Error('Add up to 12 photos at a time');
+ for(const image of await upload(fs,'about'))await addDoc(collection(db,'about'),{kind:'quality',image,caption:$('#qc').value.trim(),createdAt:serverTimestamp()});
+ $('#qf').reset();await refresh();
+},'Quality photos added')};
+$('#rf').onsubmit=e=>{e.preventDefault();run($('#rb'),async()=>{
+ const f=$('#rfile').files[0],image=f?(await upload([f],'about'))[0]:'';
+ await addDoc(collection(db,'about'),{kind:'review',name:$('#rn').value.trim(),city:$('#rc').value.trim(),rating:+$('#rs').value,text:$('#rt').value.trim(),image,createdAt:serverTimestamp()});
+ $('#rf').reset();await refresh();
+},'Review added')};
+$('#al').onclick=e=>{
+ const b=e.target.closest('[data-a]');if(!b||!confirm('Delete this from the Why Us page?'))return;
+ run(b,async()=>{await deleteDoc(doc(db,'about',b.closest('.row').dataset.id));await refresh()},'Deleted');
+};
+
+/* ---------- orders (live) ---------- */
+const ST=[['new','New'],['verified','Payment verified'],['shipped','Shipped'],['delivered','Delivered'],['cancelled','Cancelled']];
+const when=o=>{const t=o.createdAt?.seconds;return t?new Date(t*1000).toLocaleString('en-IN',{dateStyle:'medium',timeStyle:'short'}):''};
+function watchOrders(){
+ unsub?.();first=true;
+ unsub=onSnapshot(collection(db,'orders'),snap=>{
+  orders=snap.docs.map(d=>({id:d.id,...d.data()}));
+  orders.sort((a,b)=>(b.createdAt?.seconds||0)-(a.createdAt?.seconds||0));
+  if(!first)snap.docChanges().forEach(c=>{if(c.type==='added')toast('New order '+c.doc.id)});
+  first=false;drawOrders();
+ },()=>toast('Could not load orders. Check your Firestore rules.'));
+}
+function drawOrders(){
+ const q=$('#oq').value.trim().toLowerCase(),f=$('#of').value,n=orders.filter(o=>o.status==='new').length;
+ const l=orders.filter(o=>(!f||o.status===f)&&(!q||[o.orderId,o.id,o.name,o.phone,o.email,o.utr].join(' ').toLowerCase().includes(q)));
+ $('#nb').textContent=n;$('#nb').hidden=!n;
+ $('#ocount').textContent=`${orders.length} total · ${n} new`;
+ $('#ol').innerHTML=l.map(o=>`<div class="panel oc" data-id="${esc(o.id)}">
+  <div class="oh"><span class="oid">${esc(o.orderId||o.id)}</span><span class="mute">${esc(when(o))}</span><select data-s="${esc(o.status)}" aria-label="Order status">${ST.map(([v,t])=>`<option value="${v}"${v===o.status?' selected':''}>${t}</option>`).join('')}</select></div>
+  <div class="og">
+   <div><h4>Customer</h4><b>${esc(o.name)}</b><br><a href="tel:${esc(o.phone)}">${esc(o.phone)}</a>${o.email?`<br><a href="mailto:${esc(o.email)}">${esc(o.email)}</a>`:''}</div>
+   <div><h4>Deliver to</h4>${esc(o.address)}<br>${esc(o.city)}, ${esc(o.state)} ${esc(o.pincode)}</div>
+   <div><h4>Payment</h4><b>${inr(o.total)}</b><br><span class="mute">UTR</span> <code>${esc(o.utr)}</code></div>
+  </div>
+  <div class="og" style="grid-template-columns:1fr"><div><h4>Items</h4>${(o.items||[]).map(i=>{const im=prods.find(p=>p.id===i.id)?.images?.[0];return `<div class="oi"><div>${im?`<img src="${esc(im)}" alt="">`:''}</div><span>${esc(i.name)}<br><span class="mute">Size ${esc(i.size)} × ${esc(i.qty)}</span></span><span>${inr(i.price*i.qty)}</span></div>`}).join('')}</div></div>
+  <div class="ab" style="margin-top:14px"><button class="btn ghost sm" data-a="copy">Copy order ID</button><button class="btn ghost sm danger" data-a="del">Delete</button></div>
+ </div>`).join('')||`<p class="empty">${orders.length?'No orders match your search.':'No orders yet. New orders will show up here automatically.'}</p>`;
+}
+$('#oq').oninput=drawOrders;$('#of').onchange=drawOrders;
+$('#ol').onchange=e=>{
+ const sel=e.target.closest('select');if(!sel)return;
+ updateDoc(doc(db,'orders',sel.closest('.oc').dataset.id),{status:sel.value}).then(()=>toast('Status updated')).catch(()=>toast('Could not update. Check your Firebase rules.'));
+};
+$('#ol').onclick=e=>{
+ const b=e.target.closest('[data-a]');if(!b)return;
+ const id=b.closest('.oc').dataset.id;
+ if(b.dataset.a==='copy')return navigator.clipboard?.writeText(id).then(()=>toast('Order ID copied'));
+ if(!confirm(`Delete order ${id}? This cannot be undone.`))return;
+ run(b,()=>deleteDoc(doc(db,'orders',id)),'Order deleted');
+};
+
+/* ---------- tabs + auth ---------- */
+$$('.tabs button').forEach(b=>b.onclick=()=>{
+ $$('.tabs button').forEach(x=>x.classList.toggle('on',x===b));
+ ['gallery','products','orders','about'].forEach(t=>$('#t-'+t).hidden=b.dataset.t!==t);
+});
+if(!FIREBASE_CONFIG){$('#setup').hidden=false}
+else{
+ const app=initializeApp(FIREBASE_CONFIG);auth=getAuth(app);db=getFirestore(app);
+ onAuthStateChanged(auth,u=>{
+  if(u&&(u.email||'').toLowerCase()!==ADMIN_EMAIL){signOut(auth);$('#lerr').textContent='This Google account is not allowed to use the admin portal.';u=null}
+  $('#login').hidden=!!u;$('#app').hidden=!u;
+  if(u){$('#who').textContent=u.email;refresh().catch(()=>toast('Could not load data. Check your Firestore rules.'));watchOrders()}
+  else{unsub?.();unsub=null;orders=[]}
+ });
+  $('#lb').onclick=()=>{$('#lerr').textContent='';run($('#lb'),async()=>{
+  try{await signInWithPopup(auth,new GoogleAuthProvider())}
+  catch(e){
+   const m={'auth/popup-closed-by-user':'','auth/cancelled-popup-request':'','auth/popup-blocked':'Allow pop-ups for this page and try again.','auth/unauthorized-domain':'Open this page from http://localhost, not by double-clicking the file.','auth/operation-not-supported-in-this-environment':'Open this page from http://localhost, not by double-clicking the file.'};
+   $('#lerr').textContent=e.code in m?m[e.code]:'Could not sign in. Please try again.';
+  }
+ })};
+ $('#out').onclick=()=>signOut(auth);
+}
+</script>
+</body>
+</html>
